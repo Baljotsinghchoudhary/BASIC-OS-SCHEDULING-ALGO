@@ -6,7 +6,7 @@
 
     struct process
     {
-    int id,at,pr,bt,wt,tat,rt;
+    int id,at,pr,bt,wt,tat;
     bool operator<(const process a) const{
         return this->pr>a.pr||this->pr==a.pr&&this->at>a.at||this->bt==a.bt&&this->at==a.at&&this->id>a.id;// a<b==>a placed before b(b has higher priority)
 
@@ -15,7 +15,7 @@
 
     double total_tat=0,total_wt=0;
 
-
+    
 
     int main()
     {
@@ -35,7 +35,6 @@
             cin>>a[i].bt;
             cout<<"PRIORITY(lower the priority number higher its priority): ";
             cin>>a[i].pr;
-            a[i].rt=a[i].bt;
             a[i].id=i+1;
             m[a[i].at].push_back(i);
         }
@@ -48,7 +47,7 @@
 
         while(!Q.empty()||it!=m.end())
         {
-            if(it!=m.end()&&it->first<=current_timer)
+              while(it!=m.end()&&it->first<=current_timer)
                    {
 
                     for(auto x:it->second)
@@ -70,24 +69,17 @@
 
 
 
+
+
+
             process current=Q.top();
             Q.pop();
-            current.rt--;
-
-            if(current.rt==0)
-            {
-                current.wt=current_timer+1-current.at-current.bt;
-                current.tat=current.wt+current.bt;
-                total_wt = total_wt + current.wt;
-                total_tat = total_tat + current.tat;
-                 cout <<setw(20) << current.id <<setw(20)<<current.at<<setw(20)<<current.pr<<setw(20)<< current.bt <<setw(20)<< current.wt <<setw(20)<< current.tat <<endl;
-
-            }
-            else
-            {
-                Q.push(current);
-            }
-            current_timer+=1;
+            current.wt=current_timer-current.at;
+            current.tat=current.wt+current.bt;
+            total_wt = total_wt + current.wt;
+            total_tat = total_tat + current.tat;
+            cout <<setw(20) << current.id <<setw(20)<<current.at<<setw(20)<<current.pr<<setw(20)<< current.bt <<setw(20)<< current.wt <<setw(20)<< current.tat <<endl;
+            current_timer+=current.bt;
 
 
         }
@@ -100,5 +92,4 @@
 
         return 0;
     }
-
 
